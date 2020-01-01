@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: shorturl-go-expose
+spec:
+  selector:
+    app: shorturl-go
+  ports:
+  - protocol: TCP
+    port: 8081
+    nodePort: 30432
+  type: LoadBalancer
+#  externalIPs:
+#  - 10.0.0.67

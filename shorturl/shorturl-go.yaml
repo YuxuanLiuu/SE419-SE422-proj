@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: shorturl-go
+  name: shorturl-go
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: shorturl-go
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: shorturl-go
+    spec:
+      containers:
+      - image: 1197744123/shorturl-go:0.8.0
+        env:
+          - name: SHORT_URL_REDIS_IP
+            value: 10.96.246.179
+        imagePullPolicy: IfNotPresent
+        name: shorturl-go
+        ports:
+        - containerPort: 8081
+          name: shorturl-expose
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler

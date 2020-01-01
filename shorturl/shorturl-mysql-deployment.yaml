@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shorturl-mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: shorturl-mysql
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: shorturl-mysql
+spec:
+  selector:
+    matchLabels:
+      app: shorturl-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: shorturl-mysql
+    spec:
+      containers:
+      - image: 1197744123/shorturl-mysql:0.1
+        name: shorturl-mysql
+        resources:
+          requests:
+            memory: "800Mi"
+            cpu: "1300m"
+          limits:
+            memory: "1500Mi"
+            cpu: "1900m"
+        ports:
+        - containerPort: 3306
+          name: shorturl-mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
