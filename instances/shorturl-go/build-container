@@ -1,0 +1,4 @@
+GOOS=linux bash build
+docker build -t 1197744123/shorturl-go:0.8.0 .
+docker push 1197744123/shorturl-go:0.8.0
+rm shorturl-go
